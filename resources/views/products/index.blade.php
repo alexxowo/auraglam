@@ -14,6 +14,14 @@
                         <h1 class="display-lg text-[#303334] mb-2 font-black tracking-tight">Productos</h1>
                         <p class="body-md text-[#5d5f60]">Gestión de inventario y precios.</p>
                     </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="{{ route('products.import') }}" class="flex items-center space-x-2 px-6 py-3 bg-white text-[#5d5f60] rounded-xl hover:bg-[#ffd9e2] hover:text-[#be004c] transition-all duration-300 shadow-sm group">
+                            <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span class="font-bold text-sm">Excel</span>
+                        </a>
+                    </div>
                 </div>
 
                 <a href="{{ route('products.create') }}" class="fab group" title="Nuevo Producto">

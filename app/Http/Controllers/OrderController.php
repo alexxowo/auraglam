@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\ExchangeRate;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class OrderController extends Controller
      */
     public function index(Request $request): View
     {
-        $query = Order::with(['payments', 'items.product'])->latest();
+        $query = Order::with(['payments', 'items.product', 'exchangeRate'])->latest();
 
         if ($request->has('status') && $request->status) {
             $query->where('status', $request->status);
@@ -37,8 +38,9 @@ class OrderController extends Controller
     public function create(): View
     {
         $products = Product::where('stock', '>', 0)->get();
+        $latestRate = ExchangeRate::where('currency', 'EUR')->where('source', 'oficial')->latest('last_update')->first();
 
-        return view('orders.create', compact('products'));
+        return view('orders.create', compact('products', 'latestRate'));
     }
 
     /**
@@ -56,6 +58,8 @@ class OrderController extends Controller
         try {
             DB::beginTransaction();
 
+            $latestRate = ExchangeRate::where('currency', 'EUR')->where('source', 'oficial')->latest('last_update')->first();
+
             $today = date('dmY');
             $lastOrder = Order::where('document_number', 'like', $today.'%')
                 ->orderBy('document_number', 'desc')
@@ -70,6 +74,7 @@ class OrderController extends Controller
                 'document_number' => $documentNumber,
                 'total_amount' => 0,
                 'status' => 'pending',
+                'exchange_rate_id' => $latestRate ? $latestRate->id : null,
             ]);
 
             $totalAmount = 0;

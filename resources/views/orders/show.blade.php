@@ -52,17 +52,32 @@
                                 </thead>
                                 <tbody class="divide-y divide-[#303334]/5">
                                     @foreach($order->items as $item)
+                                        @php
+                                            $subtotalBs = $order->exchangeRate ? $item->subtotal * $order->exchangeRate->value : null;
+                                        @endphp
                                         <tr>
                                             <td class="px-6 py-4 body-md text-[#303334]">{{ $item->product->name }}</td>
                                             <td class="px-6 py-4 text-center body-md text-[#5d5f60]">{{ $item->quantity }}</td>
                                             <td class="px-6 py-4 text-right body-md text-[#5d5f60]">${{ number_format($item->unit_price, 2) }}</td>
-                                            <td class="px-6 py-4 text-right headline-md text-sm text-[#303334]">${{ number_format($item->subtotal, 2) }}</td>
+                                            <td class="px-6 py-4 text-right">
+                                                <div class="flex flex-col items-end">
+                                                    @if($subtotalBs)
+                                                        <span class="body-xs text-[#5d5f60] mb-0.5">BsS {{ number_format($subtotalBs, 2) }}</span>
+                                                    @endif
+                                                    <span class="headline-md text-sm text-[#303334]">${{ number_format($item->subtotal, 2) }}</span>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                             <div class="p-6 bg-[#303334] text-white flex justify-between items-center">
-                                <span class="label-md uppercase tracking-widest opacity-60">Total Venta</span>
+                                <div class="flex flex-col">
+                                    <span class="label-md uppercase tracking-widest opacity-60">Total Venta</span>
+                                    @if($order->exchangeRate)
+                                        <span class="body-sm font-medium opacity-80">BsS {{ number_format($order->total_amount * $order->exchangeRate->value, 2) }}</span>
+                                    @endif
+                                </div>
                                 <span class="display-text text-3xl font-bold">${{ number_format($order->total_amount, 2) }}</span>
                             </div>
                         </div>
@@ -75,11 +90,21 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between">
                                     <span class="body-md text-[#5d5f60]">Total Pedido:</span>
-                                    <span class="body-md font-medium">${{ number_format($order->total_amount, 2) }}</span>
+                                    <div class="flex flex-col items-end">
+                                        @if($order->exchangeRate)
+                                            <span class="body-xs text-[#5d5f60]">BsS {{ number_format($order->total_amount * $order->exchangeRate->value, 2) }}</span>
+                                        @endif
+                                        <span class="body-md font-medium">${{ number_format($order->total_amount, 2) }}</span>
+                                    </div>
                                 </div>
                                 <div class="flex justify-between">
                                     <span class="body-md text-[#5d5f60]">Pagado:</span>
-                                    <span class="body-md font-medium text-[#be004c]">${{ number_format($totalPaid, 2) }}</span>
+                                    <div class="flex flex-col items-end">
+                                        @if($order->exchangeRate)
+                                            <span class="body-xs text-[#5d5f60]">BsS {{ number_format($totalPaid * $order->exchangeRate->value, 2) }}</span>
+                                        @endif
+                                        <span class="body-md font-medium text-[#be004c]">${{ number_format($totalPaid, 2) }}</span>
+                                    </div>
                                 </div>
                                 <div class="pt-4 border-t border-[#303334]/5 flex justify-between items-end">
                                     <span class="label-md uppercase tracking-widest">Pendiente</span>
@@ -89,6 +114,29 @@
                                 </div>
                             </div>
                         </div>
+
+                        @if($order->exchangeRate)
+                            <div class="card bg-[#f3f3f4]/20 border border-[#f3f3f4]">
+                                <h3 class="label-md uppercase tracking-widest mb-4">Tasa de Operación</h3>
+                                <div class="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm">
+                                    <div class="w-10 h-10 rounded-lg bg-[#f3f3f4] flex items-center justify-center font-bold text-[#303334]">
+                                        {{ $order->exchangeRate->currency }}
+                                    </div>
+                                    <div class="flex-1 px-4">
+                                        <p class="text-[10px] label-md uppercase tracking-wider mb-0.5">Valor Unitario</p>
+                                        <p class="body-sm font-bold text-[#303334]">${{ number_format($order->exchangeRate->value, 2) }}</p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] text-[#5d5f60] uppercase mb-0.5">Fuente</p>
+                                        <p class="text-[10px] font-medium text-[#be004c] uppercase">{{ $order->exchangeRate->source }}</p>
+                                    </div>
+                                </div>
+                                <p class="text-[10px] text-[#5d5f60] mt-4 flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Fijada el {{ $order->exchangeRate->last_update->format('d/m/Y H:i') }}
+                                </p>
+                            </div>
+                        @endif
 
                         <div class="card">
                             <h3 class="label-md uppercase tracking-widest mb-4">Pagos Registrados</h3>

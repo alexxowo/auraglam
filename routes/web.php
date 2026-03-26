@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,20 +23,31 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
-Route::resource('products', App\Http\Controllers\ProductController::class)
+Route::get('/dashboard/chart-data', [DashboardController::class, 'chartData'])
+    ->middleware('auth')
+    ->name('dashboard.chart-data');
+
+Route::resource('products', ProductController::class)
     ->middleware('auth');
 
-Route::resource('orders', App\Http\Controllers\OrderController::class)
+Route::prefix('products-import')->middleware('auth')->group(function () {
+    Route::get('/', [ProductImportController::class, 'show'])->name('products.import');
+    Route::post('/preview', [ProductImportController::class, 'preview'])->name('products.import.preview');
+    Route::post('/store', [ProductImportController::class, 'store'])->name('products.import.store');
+    Route::get('/template', [ProductImportController::class, 'downloadTemplate'])->name('products.import.template');
+});
+
+Route::resource('orders', OrderController::class)
     ->only(['index', 'create', 'store', 'show'])
     ->middleware('auth');
 
-Route::get('orders/details/{document_number}', [App\Http\Controllers\OrderController::class, 'getDetails'])
+Route::get('orders/details/{document_number}', [OrderController::class, 'getDetails'])
     ->name('orders.details')
     ->middleware('auth');
 
 Route::prefix('treasury')->middleware('auth')->group(function () {
-    Route::resource('payment-methods', App\Http\Controllers\PaymentMethodController::class)
+    Route::resource('payment-methods', PaymentMethodController::class)
         ->except(['show']);
-    Route::resource('payments', App\Http\Controllers\PaymentController::class)
+    Route::resource('payments', PaymentController::class)
         ->only(['index', 'create', 'store']);
 });
