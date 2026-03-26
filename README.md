@@ -89,4 +89,4 @@ AuraGlam está optimizado para **Dokploy** mediante un `Dockerfile` multi-stage:
 -   **DevOps**: Docker, Dokploy
 
 ---
-<p align="center">Diseñado con ❤️ por el equipo de Advanced Agentic Coding de Google Deepmind.</p>
+<p align="center">Diseñado con ❤️</p>
