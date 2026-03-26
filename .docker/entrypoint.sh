@@ -19,7 +19,7 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
 fi
 
 # Set permissions for storage & cache at runtime just in case
-chown -R www-data:www-data storage bootstrap/cache
+chown -R www-data:www-data .
 
 # Execute the original command (Apache)
 exec "$@"
