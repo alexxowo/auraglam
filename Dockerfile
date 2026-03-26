@@ -1,6 +1,5 @@
 # Stage 1: PHP Dependencies
-FROM php:8.4-cli-alpine AS vendor
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+FROM composer:latest AS vendor
 WORKDIR /app
 COPY composer.json composer.lock ./
 RUN composer install \
@@ -8,7 +7,8 @@ RUN composer install \
     --no-interaction \
     --no-plugins \
     --no-scripts \
-    --prefer-dist
+    --prefer-dist \
+    --ignore-platform-reqs
 
 # Stage 2: Frontend Assets
 FROM node:20-alpine AS frontend
