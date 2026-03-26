@@ -6,7 +6,6 @@ vendor
 tests
 storage/*.key
 .phpunit.result.cache
-.docker
 Dockerfile
 docker-compose.yml
 README.md
