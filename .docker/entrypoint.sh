@@ -18,8 +18,9 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     php artisan migrate --force
 fi
 
-# Set permissions for storage & cache at runtime just in case
+# Set permissions for the entire project at runtime just in case
 chown -R www-data:www-data .
+chmod -R 775 storage bootstrap/cache
 
 # Execute the original command (Apache)
 exec "$@"
