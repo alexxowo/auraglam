@@ -19,7 +19,7 @@
                         <form action="{{ route('categories.index') }}" method="GET" class="relative group">
                             <input type="text" name="search" value="{{ $search ?? '' }}" 
                                    placeholder="Buscar categorías..." 
-                                   class="input-field pl-12 focus:ring-2 focus:ring-[#be004c]/20 transition-all">
+                                   class="input-field pl-12! focus:ring-2 focus:ring-[#be004c]/20 transition-all">
                             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5d5f60] group-focus-within:text-[#be004c] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -59,17 +59,17 @@
                                     <div class="flex items-center space-x-3">
                                         <!-- Status Bloom -->
                                         @if($category->is_active)
-                                            <div class="relative flex items-center justify-center w-6 h-6">
-                                                <div class="absolute w-3 h-3 bg-[#4ade80] rounded-full blur-xs"></div>
-                                                <div class="relative w-2 h-2 bg-[#4ade80] rounded-full"></div>
+                                            <div class="relative flex items-center justify-center w-3 h-3">
+                                                <div class="absolute w-full h-full bg-[#4ade80] rounded-full blur-xs"></div>
+                                                <div class="relative w-1.5 h-1.5 bg-[#4ade80] rounded-full"></div>
                                             </div>
-                                            <span class="label-md text-[10px] text-[#5d5f60] uppercase tracking-widest">Activa</span>
+                                            <span class="text-[10px] font-bold text-[#4ade80] uppercase tracking-widest">Activa</span>
                                         @else
-                                            <div class="relative flex items-center justify-center w-6 h-6">
-                                                <div class="absolute w-3 h-3 bg-[#5d5f60]/40 rounded-full blur-xs"></div>
-                                                <div class="relative w-2 h-2 bg-[#5d5f60]/60 rounded-full"></div>
+                                            <div class="relative flex items-center justify-center w-3 h-3">
+                                                <div class="absolute w-full h-full bg-[#5d5f60]/40 rounded-full blur-xs"></div>
+                                                <div class="relative w-1.5 h-1.5 bg-[#5d5f60]/60 rounded-full"></div>
                                             </div>
-                                            <span class="label-md text-[10px] text-[#5d5f60] uppercase tracking-widest">Inactiva</span>
+                                            <span class="text-[10px] font-bold text-[#5d5f60] uppercase tracking-widest">Inactiva</span>
                                         @endif
                                     </div>
 
@@ -97,8 +97,8 @@
                                 </p>
 
                                 <div class="pt-4 border-t border-[#303334]/5 flex items-center justify-between">
-                                    <span class="label-md uppercase tracking-tighter text-[10px]">Slug: {{ $category->slug }}</span>
-                                    <span class="label-md uppercase tracking-tighter text-[10px] bg-[#f3f3f4] px-2 py-1 rounded-lg">
+                                    <span class="text-[10px] font-medium uppercase tracking-widest text-[#5d5f60]/50">Slug: {{ $category->slug }}</span>
+                                    <span class="text-[10px] font-bold uppercase tracking-widest bg-[#ffd9e2] text-[#be004c] px-3 py-1.5 rounded-full">
                                         {{ $category->products_count ?? $category->products()->count() }} Productos
                                     </span>
                                 </div>

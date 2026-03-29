@@ -49,7 +49,7 @@
         .display-lg { font-size: 3.5rem; letter-spacing: -0.02em; }
         .headline-md { font-size: 1.75rem; }
         .body-md { font-size: 0.875rem; }
-        .label-md { font-size: 0.75rem; color: #ffffff; font-weight: 500; }
+        .label-md { font-size: 0.75rem; color: var(--on-surface-variant); font-weight: 500; }
 
         .card {
             background-color: var(--surface-container-lowest);
@@ -75,23 +75,38 @@
         }
 
         .input-field {
-            background-color: var(--surface-container-highest);
-            border: 1px solid var(--outline-variant);
-            border-radius: 0.5rem;
+            background-color: #ffffff;
+            border: 1px solid #e1e3e3;
+            border-radius: 0.75rem;
             padding: 0.75rem 1rem;
             width: 100%;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--on-background);
+            font-size: 0.875rem;
         }
 
         .input-field:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(190, 0, 76, 0.1);
+            background-color: #ffffff;
         }
 
-        /* Hide original selects to avoid flash or double display */
-        .select2 {
-            display: none;
+        .input-field::placeholder {
+            color: var(--on-surface-variant);
+            opacity: 0.5;
+        }
+
+        /* Hide number input spinners */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
 
         .select2-hidden-accessible {

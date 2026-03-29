@@ -17,11 +17,11 @@
                     
                     <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full md:w-auto">
                         <form action="{{ route('products.index') }}" method="GET" id="filterForm" class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full">
-                            <div class="relative w-full sm:w-64 group">
+                            <div class="relative w-full sm:w-72 group">
                                 <input type="text" name="search" value="{{ $search ?? '' }}" 
                                        placeholder="Buscar..." 
-                                       class="input-field pl-10 focus:ring-2 focus:ring-[#be004c]/20 transition-all">
-                                <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5d5f60] group-focus-within:text-[#be004c] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                       class="input-field pl-12! focus:ring-2 focus:ring-[#be004c]/20 transition-all">
+                                <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5d5f60] group-focus-within:text-[#be004c] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
                             </div>

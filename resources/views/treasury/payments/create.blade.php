@@ -22,12 +22,16 @@
                         <div class="space-y-6">
                             <div>
                                 <label for="order_id" class="label-md block mb-2 uppercase tracking-wider">Seleccionar Pedido</label>
-                                <select name="order_id" id="order_id" required class="select2" data-placeholder="Selecciona un pedido...">
+                                <select name="order_id" id="order_id" required class="select2 input-field" data-placeholder="Selecciona un pedido...">
                                     <option></option>
                                     @foreach($orders as $order)
-                                        <option value="{{ $order->id }}" {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
-                                            #{{ $order->id }} - {{ $order->customer_name }} (Total: ${{ number_format($order->total_amount, 2) }})
-                                        </option>
+                                        @if($order->pending_amount > 0 || $selectedOrderId == $order->id)
+                                            <option value="{{ $order->id }}" 
+                                                    data-pending="{{ $order->pending_amount }}"
+                                                    {{ (old('order_id') == $order->id || $selectedOrderId == $order->id) ? 'selected' : '' }}>
+                                                #{{ $order->document_number ?? $order->id }} - {{ $order->customer_name }} (Pendiente: ${{ number_format($order->pending_amount, 2) }})
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                                 @error('order_id') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
@@ -50,9 +54,9 @@
                                 <div>
                                     <label for="amount" class="label-md block mb-2 uppercase tracking-wider">Monto a Pagar</label>
                                     <div class="relative flex items-center">
+                                        <span class="absolute left-4 text-[#be004c] text-xs font-black select-none pointer-events-none">$</span>
                                         <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount') }}" required
-                                               class="input-field pr-10 text-right font-medium" placeholder="0.00">
-                                        <span class="absolute right-4 text-[#be004c] text-xs font-black select-none pointer-events-none">$</span>
+                                               class="input-field pl-8 pr-4 text-right font-medium" placeholder="0.00">
                                     </div>
                                     @error('amount') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
                                 </div>
@@ -89,4 +93,37 @@
         </main>
     </div>
 </div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('.select2').each(function() {
+        $(this).select2({
+            width: '100%',
+            dropdownParent: $(this).parent(),
+            placeholder: $(this).data('placeholder'),
+            allowClear: true
+        });
+    });
+
+    const amountInput = $('#amount');
+    const orderSelect = $('#order_id');
+
+    function updateAmount() {
+        const selected = orderSelect.find(':selected');
+        if (selected.val() && !amountInput.val()) {
+            const pending = selected.data('pending');
+            amountInput.val(parseFloat(pending).toFixed(2));
+        }
+    }
+
+    orderSelect.on('change', updateAmount);
+
+    // Initial check if an order is pre-selected
+    if (orderSelect.val()) {
+        updateAmount();
+    }
+});
+</script>
+@endpush
 @endsection

@@ -18,6 +18,7 @@
             <nav class="mt-5 flex-1 px-4 space-y-2">
                 @php
                     $navItems = [
+                        ['label' => 'Principal', 'is_header' => true],
                         ['route' => 'dashboard', 'label' => 'Dashboard'],
                         ['route' => 'products.index', 'label' => 'Productos', 'pattern' => 'products.*'],
                         ['route' => 'categories.index', 'label' => 'Categorías', 'pattern' => 'categories.*'],
@@ -32,7 +33,7 @@
                 @foreach($navItems as $item)
                     @if($item['is_header'] ?? false)
                         <div class="pt-4 pb-2">
-                            <span class="px-4 label-md uppercase tracking-[0.2em] opacity-40">{{ $item['label'] }}</span>
+                            <span class="px-4 uppercase tracking-[0.2em] opacity-40">{{ $item['label'] }}</span>
                         </div>
                     @else
                         <a href="{{ route($item['route']) }}" 

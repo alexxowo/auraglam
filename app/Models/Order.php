@@ -33,4 +33,14 @@ class Order extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function getTotalPaidAttribute(): float
+    {
+        return $this->payments()->sum('amount');
+    }
+
+    public function getPendingAmountAttribute(): float
+    {
+        return $this->total_amount - $this->total_paid;
+    }
 }

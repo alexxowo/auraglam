@@ -5,22 +5,22 @@
     @include('layouts.navigation')
 
     <div class="flex flex-col w-full md:w-0 flex-1 overflow-hidden">
-        <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none py-12 px-12">
+        <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none py-12 px-6 sm:px-12">
             <div class="max-w-6xl mx-auto">
                 <header class="mb-12">
                     <a href="{{ route('products.show', $product) }}" class="label-md uppercase tracking-widest hover:text-[#be004c] transition-colors mb-4 inline-block">
                         ← Volver al producto
                     </a>
-                    <div class="flex justify-between items-end">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end space-y-6 sm:space-y-0">
                         <div>
-                            <h1 class="display-lg text-[#303334] mb-2 font-black tracking-tight">Gestionar Variantes</h1>
-                            <p class="body-md text-[#5d5f60]">Control de atributos y combinaciones para <strong>{{ $product->name }}</strong>.</p>
+                            <h1 class="display-lg text-3xl sm:text-5xl text-[#303334] mb-2 font-black tracking-tight">Gestionar Variantes</h1>
+                            <p class="body-md text-[#5d5f60] max-w-xl">Control de atributos y combinaciones para <strong>{{ $product->name }}</strong>.</p>
                         </div>
-                        <form action="{{ route('products.variants.generate', $product) }}" method="POST">
+                        <form action="{{ route('products.variants.generate', $product) }}" method="POST" class="w-full sm:w-auto">
                             @csrf
-                            <button type="submit" class="btn-primary flex items-center space-x-2">
+                            <button type="submit" class="btn-primary flex items-center justify-center space-x-2 w-full sm:w-auto px-6 py-3 rounded-xl shadow-lg shadow-[#be004c]/10">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2-2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                                <span>Generar Combinaciones</span>
+                                <span class="text-sm font-bold uppercase tracking-wider">Generar Combinaciones</span>
                             </button>
                         </form>
                     </div>
@@ -125,9 +125,9 @@
                                                     </form>
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <div class="relative">
-                                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#5d5f60]">$</span>
-                                                        <input type="number" step="0.01" name="price_override" form="update-{{ $variant->id }}" value="{{ $variant->price_override }}" class="input-field py-1 pl-6 w-28" placeholder="{{ number_format($product->selling_price, 2) }}">
+                                                    <div class="relative flex items-center">
+                                                        <span class="absolute left-3 text-[#5d5f60] text-xs font-black select-none pointer-events-none">$</span>
+                                                        <input type="number" step="0.01" name="price_override" form="update-{{ $variant->id }}" value="{{ $variant->price_override }}" class="input-field py-1 pl-8 w-28 text-right" placeholder="{{ number_format($product->selling_price, 2) }}">
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 text-right space-x-2">

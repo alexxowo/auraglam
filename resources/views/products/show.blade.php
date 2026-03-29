@@ -5,28 +5,28 @@
     @include('layouts.navigation')
 
     <div class="flex flex-col w-full md:w-0 flex-1 overflow-hidden">
-        <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none py-12 px-12">
+        <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none py-12 px-6 sm:px-12">
             <div class="max-w-5xl mx-auto">
                 <div class="mb-12">
                     <a href="{{ route('products.index') }}" class="label-md uppercase tracking-widest hover:text-[#be004c] transition-colors mb-4 inline-block">
                         ← Volver al listado
                     </a>
-                    <div class="flex justify-between items-start">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-6 sm:space-y-0">
                         <div>
-                            <h1 class="display-lg text-[#303334] mb-2">{{ $product->name }}</h1>
-                            <p class="body-md text-[#5d5f60]">{{ $product->description ?: 'Sin descripción adicional.' }}</p>
+                            <h1 class="display-lg text-3xl sm:text-5xl text-[#303334] mb-2 font-black tracking-tight">{{ $product->name }}</h1>
+                            <p class="body-md text-[#5d5f60] max-w-2xl">{{ $product->description ?: 'Sin descripción adicional.' }}</p>
                         </div>
-                        <div class="flex space-x-4">
-                            <a href="{{ route('products.variants.index', $product) }}" class="btn-primary bg-[#be004c]/10 text-[#be004c] hover:bg-[#be004c]/20">
+                        <div class="flex flex-wrap gap-3 sm:space-x-4 sm:gap-0">
+                            <a href="{{ route('products.variants.index', $product) }}" class="btn-primary bg-[#be004c]/10 text-[#be004c] hover:bg-[#be004c]/20 px-4 py-2 text-sm rounded-xl">
                                 Variantes
                             </a>
-                            <a href="{{ route('products.edit', $product) }}" class="btn-primary bg-[#f3f3f4] text-[#303334] hover:bg-[#e1e3e3]">
+                            <a href="{{ route('products.edit', $product) }}" class="btn-primary bg-[#f3f3f4] text-[#303334] hover:bg-[#e1e3e3] px-4 py-2 text-sm rounded-xl">
                                 Editar
                             </a>
                             <form action="{{ route('products.destroy', $product) }}" method="POST" onsubmit="return confirm('¿Estás seguro?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn-primary bg-[#f97386]/10 text-[#f97386] hover:bg-[#f97386]/20">
+                                <button type="submit" class="btn-primary bg-[#f97386]/10 text-[#f97386] hover:bg-[#f97386]/20 px-4 py-2 text-sm rounded-xl">
                                     Borrar
                                 </button>
                             </form>
@@ -39,25 +39,25 @@
                     <div class="md:col-span-2 space-y-8">
                         <div class="card">
                             <h3 class="label-md uppercase tracking-widest mb-6 border-b border-[#303334]/5 pb-4">Análisis de Precios</h3>
-                            <div class="grid grid-cols-2 gap-12">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-12">
                                 <div>
-                                    <span class="label-md block mb-1">Precio Compra</span>
-                                    <span class="headline-md text-2xl text-[#5d5f60]">${{ number_format($product->purchase_price, 2) }}</span>
+                                    <span class="label-md block mb-1 opacity-60">Precio Compra</span>
+                                    <span class="headline-md text-xl sm:text-2xl text-[#5d5f60]">${{ number_format($product->purchase_price, 2) }}</span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="label-md block mb-1">Precio Venta</span>
-                                    <span class="headline-md text-3xl text-[#be004c]">${{ number_format($product->selling_price, 2) }}</span>
+                                <div class="text-left sm:text-right">
+                                    <span class="label-md block mb-1 opacity-60">Precio Venta</span>
+                                    <span class="headline-md text-2xl sm:text-3xl text-[#be004c]">${{ number_format($product->selling_price, 2) }}</span>
                                 </div>
                             </div>
                             
-                            <div class="mt-8 pt-8 border-t border-[#303334]/5 flex justify-between items-center">
+                            <div class="mt-8 pt-8 border-t border-[#303334]/5 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-6 sm:space-y-0">
                                 <div>
-                                    <span class="label-md block mb-1">Margen por Unidad</span>
-                                    <span class="headline-md text-xl text-[#303334]">${{ number_format($product->margin, 2) }}</span>
+                                    <span class="label-md block mb-1 opacity-60">Margen por Unidad</span>
+                                    <span class="headline-md text-lg sm:text-xl text-[#303334]">${{ number_format($product->margin, 2) }}</span>
                                 </div>
-                                <div class="text-right">
-                                    <span class="label-md block mb-1">Porcentaje de Ganancia</span>
-                                    <span class="headline-md text-xl text-[#be004c]">
+                                <div class="text-left sm:text-right">
+                                    <span class="label-md block mb-1 opacity-60">Porcentaje de Ganancia</span>
+                                    <span class="headline-md text-lg sm:text-xl text-[#be004c]">
                                         {{ $product->purchase_price > 0 ? number_format(($product->margin / $product->purchase_price) * 100, 1) : '100' }}%
                                     </span>
                                 </div>
@@ -67,9 +67,9 @@
                         <div class="card bg-[#303334] text-white overflow-hidden relative">
                             <div class="relative z-10">
                                 <h3 class="label-md uppercase tracking-widest mb-4 opacity-60 text-white">Proyección de Inventario</h3>
-                                <div class="flex items-end space-x-4">
-                                    <span class="display-text text-5xl font-bold">${{ number_format($product->total_stock * $product->selling_price, 2) }}</span>
-                                    <span class="body-md opacity-60 mb-2">Valor Total en Venta</span>
+                                <div class="flex items-end space-x-3 overflow-hidden">
+                                    <span class="display-text text-3xl sm:text-5xl font-bold text-[#ffd9e2] truncate">${{ number_format($product->total_stock * $product->selling_price, 2) }}</span>
+                                    <span class="body-md opacity-60 mb-1 sm:mb-2 text-[#ffd9e2] whitespace-nowrap">Valor Total</span>
                                 </div>
                             </div>
                             <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-[#be004c]/20 rounded-full blur-3xl"></div>

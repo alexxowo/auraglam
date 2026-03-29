@@ -40,10 +40,10 @@
                                 <div>
                                     <label for="purchase_price" class="label-md block mb-2 uppercase tracking-wider">Precio Compra</label>
                                     <div class="relative flex items-center">
+                                        <span class="absolute left-4 text-[#5d5f60] text-xs font-black select-none pointer-events-none">$</span>
                                         <input type="number" step="0.01" name="purchase_price" id="purchase_price" 
                                                value="{{ old('purchase_price', $product->purchase_price ?? '') }}" required
-                                               class="input-field pr-12 text-right" placeholder="0.00">
-                                        <span class="absolute right-4 text-[#5d5f60] font-medium select-none pointer-events-none">$</span>
+                                               class="input-field pl-8 pr-4 text-right" placeholder="0.00">
                                     </div>
                                     @error('purchase_price') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
                                 </div>
@@ -51,10 +51,10 @@
                                 <div>
                                     <label for="selling_price" class="label-md block mb-2 uppercase tracking-wider">Precio Venta</label>
                                     <div class="relative flex items-center">
+                                        <span class="absolute left-4 text-[#be004c] text-xs font-black select-none pointer-events-none">$</span>
                                         <input type="number" step="0.01" name="selling_price" id="selling_price" 
                                                value="{{ old('selling_price', $product->selling_price ?? '') }}" required
-                                               class="input-field pr-12 border-[#be004c]/20 text-right font-medium text-[#be004c]" placeholder="0.00">
-                                        <span class="absolute right-4 text-[#be004c] font-bold select-none pointer-events-none">$</span>
+                                               class="input-field pl-8 pr-4 border-[#be004c]/20 text-right font-medium text-[#be004c]" placeholder="0.00">
                                     </div>
                                     @error('selling_price') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
                                 </div>
