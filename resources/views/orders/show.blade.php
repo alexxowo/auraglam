@@ -21,7 +21,12 @@
                         $pending = $order->total_amount - $totalPaid;
                     @endphp
 
-                    <div class="text-right">
+                    <div class="text-right flex items-center space-x-4">
+                        <a href="{{ route('orders.pdf', $order) }}" target="_blank" class="flex items-center space-x-2 px-6 py-2 bg-[#f3f3f4] text-[#303334] rounded-xl headline-md text-sm uppercase tracking-widest hover:bg-[#e1e3e3] transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span>PDF</span>
+                        </a>
+
                         @if($pending > 0)
                             <a href="{{ route('payments.create', ['order_id' => $order->id]) }}" class="btn-primary">
                                 Registrar Pago
@@ -55,8 +60,16 @@
                                         @php
                                             $subtotalBs = $order->exchangeRate ? $item->subtotal * $order->exchangeRate->value : null;
                                         @endphp
-                                        <tr>
-                                            <td class="px-6 py-4 body-md text-[#303334]">{{ $item->product->name }}</td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex flex-col">
+                                                    <span class="body-md text-[#303334] font-medium">{{ $item->product->name }}</span>
+                                                    @if($item->variant)
+                                                        <span class="text-[18px] text-[#970542] mt-0.5 italic">
+                                                            {{ $item->variant->label }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </td>
                                             <td class="px-6 py-4 text-center body-md text-[#5d5f60]">{{ $item->quantity }}</td>
                                             <td class="px-6 py-4 text-right body-md text-[#5d5f60]">${{ number_format($item->unit_price, 2) }}</td>
                                             <td class="px-6 py-4 text-right">
@@ -71,9 +84,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <div class="p-6 bg-[#303334] text-white flex justify-between items-center">
+                            <div class="p-6 bg-[#970542] text-white flex justify-between items-center">
                                 <div class="flex flex-col">
-                                    <span class="label-md uppercase tracking-widest opacity-60">Total Venta</span>
+                                    <span class="label-md uppercase tracking-widest">Total Venta</span>
                                     @if($order->exchangeRate)
                                         <span class="body-sm font-medium opacity-80">BsS {{ number_format($order->total_amount * $order->exchangeRate->value, 2) }}</span>
                                     @endif

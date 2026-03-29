@@ -17,6 +17,9 @@
                             <p class="body-md text-[#5d5f60]">{{ $product->description ?: 'Sin descripción adicional.' }}</p>
                         </div>
                         <div class="flex space-x-4">
+                            <a href="{{ route('products.variants.index', $product) }}" class="btn-primary bg-[#be004c]/10 text-[#be004c] hover:bg-[#be004c]/20">
+                                Variantes
+                            </a>
                             <a href="{{ route('products.edit', $product) }}" class="btn-primary bg-[#f3f3f4] text-[#303334] hover:bg-[#e1e3e3]">
                                 Editar
                             </a>
@@ -65,21 +68,38 @@
                             <div class="relative z-10">
                                 <h3 class="label-md uppercase tracking-widest mb-4 opacity-60 text-white">Proyección de Inventario</h3>
                                 <div class="flex items-end space-x-4">
-                                    <span class="display-text text-5xl font-bold">${{ number_format($product->stock * $product->selling_price, 2) }}</span>
+                                    <span class="display-text text-5xl font-bold">${{ number_format($product->total_stock * $product->selling_price, 2) }}</span>
                                     <span class="body-md opacity-60 mb-2">Valor Total en Venta</span>
                                 </div>
                             </div>
                             <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-[#be004c]/20 rounded-full blur-3xl"></div>
                         </div>
+
+                        @if($product->has_variants)
+                        <div class="card">
+                            <h3 class="label-md uppercase tracking-widest mb-6 border-b border-[#303334]/5 pb-4">Desglose de Variantes</h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                                @foreach($product->variants as $variant)
+                                    <div class="p-4 bg-[#f3f3f4] rounded-xl flex flex-col justify-between">
+                                        <span class="headline-md text-sm text-[#303334] mb-1">{{ $variant->label }}</span>
+                                        <div class="flex justify-between items-end">
+                                            <span class="label-md text-[10px] uppercase">Stock</span>
+                                            <span class="headline-md text-base {{ $variant->stock <= 5 ? 'text-[#f97386]' : 'text-[#be004c]' }}">{{ $variant->stock }}</span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
                     </div>
 
                     <!-- Stock Card -->
                     <div class="space-y-8">
                         <div class="card flex flex-col items-center justify-center text-center py-12">
-                            <span class="label-md uppercase tracking-widest mb-4">Stock Disponible</span>
-                            <span class="display-text text-6xl text-[#303334] mb-4">{{ $product->stock }}</span>
+                            <span class="label-md uppercase tracking-widest mb-4">Stock Total</span>
+                            <span class="display-text text-6xl text-[#303334] mb-4">{{ $product->total_stock }}</span>
                             <div class="flex items-center space-x-2">
-                                @if($product->stock <= 5)
+                                @if($product->total_stock <= 5)
                                     <span class="w-3 h-3 rounded-full bg-[#f97386] blur-[2px]"></span>
                                     <span class="label-md text-[#f97386]">Stock Bajo</span>
                                 @else

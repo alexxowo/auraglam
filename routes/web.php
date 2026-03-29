@@ -8,6 +8,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImportController;
+use App\Http\Controllers\ProductVariantController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,19 @@ Route::get('products-export', [ProductController::class, 'export'])
     ->name('products.export')
     ->middleware('auth');
 
+// Product Variants
+Route::prefix('products/{product}')->name('products.')->middleware('auth')->group(function () {
+    Route::get('variants', [ProductVariantController::class, 'index'])->name('variants.index');
+    Route::get('variants/api', [ProductVariantController::class, 'getVariantsApi'])->name('variants.api');
+    Route::post('attributes', [ProductVariantController::class, 'storeAttribute'])->name('attributes.store');
+    Route::post('variants/generate', [ProductVariantController::class, 'generateVariants'])->name('variants.generate');
+});
+
+Route::post('attributes/{attribute}/values', [ProductVariantController::class, 'storeValue'])->name('attributes.values.store')->middleware('auth');
+Route::patch('variants/{variant}', [ProductVariantController::class, 'updateVariant'])->name('variants.update')->middleware('auth');
+Route::delete('variants/{variant}', [ProductVariantController::class, 'destroyVariant'])->name('variants.destroy')->middleware('auth');
+Route::delete('attributes/{attribute}', [ProductVariantController::class, 'destroyAttribute'])->name('attributes.destroy')->middleware('auth');
+
 Route::resource('categories', CategoryController::class)
     ->middleware('auth');
 
@@ -47,6 +61,10 @@ Route::prefix('products-import')->middleware('auth')->group(function () {
 
 Route::resource('orders', OrderController::class)
     ->only(['index', 'create', 'store', 'show'])
+    ->middleware('auth');
+
+Route::get('orders/{order}/pdf', [OrderController::class, 'downloadPdf'])
+    ->name('orders.pdf')
     ->middleware('auth');
 
 Route::get('orders/details/{document_number}', [OrderController::class, 'getDetails'])

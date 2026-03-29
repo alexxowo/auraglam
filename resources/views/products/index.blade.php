@@ -96,7 +96,7 @@
                                         @endif
                                     </div>
                                     <div class="flex items-center space-x-3 sm:space-x-4">
-                                        <span class="label-md uppercase tracking-widest text-[10px] sm:text-xs">Stock: {{ $product->stock }}</span>
+                                        <span class="label-md uppercase tracking-widest text-[10px] sm:text-xs">Stock: {{ $product->total_stock }}</span>
                                         <span class="w-1 h-1 rounded-full bg-[#5d5f60]/20"></span>
                                         <span class="label-md uppercase tracking-widest text-[10px] sm:text-xs">Margen: ${{ number_format($product->margin, 2) }}</span>
                                     </div>

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductExport;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
-use App\Exports\ProductExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
@@ -17,7 +18,7 @@ class ProductController extends Controller
      */
     public function export()
     {
-        return Excel::download(new ProductExport, 'productos_auraglam_' . now()->format('d_m_Y') . '.xlsx');
+        return Excel::download(new ProductExport, 'productos_auraglam_'.now()->format('d_m_Y').'.xlsx');
     }
 
     /**
@@ -62,12 +63,36 @@ class ProductController extends Controller
             'selling_price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'category_id' => 'nullable|exists:categories,id',
+            'has_variants' => 'nullable|boolean',
+            'attributes.*.name' => 'nullable|required_if:has_variants,1|string|max:255',
+            'attributes.*.values' => 'nullable|required_if:has_variants,1|string',
         ]);
 
-        Product::create($validated);
+        return DB::transaction(function () use ($validated, $request) {
+            $product = Product::create($validated);
 
-        return redirect()->route('products.index')
-            ->with('success', 'Producto creado exitosamente.');
+            if ($request->boolean('has_variants') && $request->has('attributes')) {
+                $attributesData = [];
+                foreach ($request->input('attributes') as $attr) {
+                    if (! empty($attr['name']) && ! empty($attr['values'])) {
+                        $attributesData[] = [
+                            'name' => $attr['name'],
+                            'values' => explode(',', $attr['values']),
+                        ];
+                    }
+                }
+
+                if (! empty($attributesData)) {
+                    $product->generateVariantsFromData($attributesData);
+
+                    return redirect()->route('products.variants.index', $product)
+                        ->with('success', 'Producto creado con variantes. Por favor asigna el stock inicial.');
+                }
+            }
+
+            return redirect()->route('products.index')
+                ->with('success', 'Producto creado exitosamente.');
+        });
     }
 
     /**

@@ -49,7 +49,7 @@
         .display-lg { font-size: 3.5rem; letter-spacing: -0.02em; }
         .headline-md { font-size: 1.75rem; }
         .body-md { font-size: 0.875rem; }
-        .label-md { font-size: 0.75rem; color: var(--on-surface-variant); font-weight: 500; }
+        .label-md { font-size: 0.75rem; color: #ffffff; font-weight: 500; }
 
         .card {
             background-color: var(--surface-container-lowest);
