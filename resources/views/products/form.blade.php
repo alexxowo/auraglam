@@ -66,6 +66,19 @@
                                        class="input-field" placeholder="0">
                                 @error('stock') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
                             </div>
+
+                            <div>
+                                <label for="category_id" class="label-md block mb-2 uppercase tracking-wider">Categoría</label>
+                                <select name="category_id" id="category_id" class="input-field">
+                                    <option value="">Seleccionar categoría</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id', $product->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('category_id') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
+                            </div>
                         </div>
 
                         <div class="pt-6 border-t border-[#303334]/5 flex justify-end space-x-4">

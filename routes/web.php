@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
@@ -28,6 +29,13 @@ Route::get('/dashboard/chart-data', [DashboardController::class, 'chartData'])
     ->name('dashboard.chart-data');
 
 Route::resource('products', ProductController::class)
+    ->middleware('auth');
+
+Route::get('products-export', [ProductController::class, 'export'])
+    ->name('products.export')
+    ->middleware('auth');
+
+Route::resource('categories', CategoryController::class)
     ->middleware('auth');
 
 Route::prefix('products-import')->middleware('auth')->group(function () {

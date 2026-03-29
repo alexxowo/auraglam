@@ -20,6 +20,7 @@
                     $navItems = [
                         ['route' => 'dashboard', 'label' => 'Dashboard'],
                         ['route' => 'products.index', 'label' => 'Productos', 'pattern' => 'products.*'],
+                        ['route' => 'categories.index', 'label' => 'Categorías', 'pattern' => 'categories.*'],
                         ['label' => 'Tesorería', 'is_header' => true],
                         ['route' => 'payments.index', 'label' => 'Pagos', 'pattern' => 'payments.*'],
                         ['route' => 'payment-methods.index', 'label' => 'Métodos de Pago', 'pattern' => 'payment-methods.*'],

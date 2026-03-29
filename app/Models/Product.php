@@ -17,7 +17,13 @@ class Product extends Model
         'purchase_price',
         'selling_price',
         'stock',
+        'category_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 
     /**
      * Get the product's margin.
