@@ -18,6 +18,9 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     php artisan migrate --force
 fi
 
+echo "Creating storage symlink..."
+php artisan storage:link
+
 # Set permissions for the entire project at runtime just in case
 chown -R www-data:www-data .
 chmod -R 775 storage bootstrap/cache
