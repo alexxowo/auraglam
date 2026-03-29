@@ -15,6 +15,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
+        'image_path',
         'purchase_price',
         'selling_price',
         'stock',
@@ -63,6 +64,16 @@ class Product extends Model
     {
         return Attribute::make(
             get: fn () => $this->has_variants ? $this->variants()->sum('stock') : $this->stock,
+        );
+    }
+
+    /**
+     * Get the product's image URL.
+     */
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->image_path ? \Illuminate\Support\Facades\Storage::url($this->image_path) : null,
         );
     }
 

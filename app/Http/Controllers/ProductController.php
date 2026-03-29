@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -59,6 +60,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|max:5120', // Up to 5MB
             'purchase_price' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
@@ -69,6 +71,10 @@ class ProductController extends Controller
         ]);
 
         return DB::transaction(function () use ($validated, $request) {
+            if ($request->hasFile('image')) {
+                $validated['image_path'] = $request->file('image')->store('products', 'public');
+            }
+
             $product = Product::create($validated);
 
             if ($request->boolean('has_variants') && $request->has('attributes')) {
@@ -121,11 +127,20 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'image' => 'nullable|image|max:5120',
             'purchase_price' => 'required|numeric|min:0',
             'selling_price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'category_id' => 'nullable|exists:categories,id',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+            $validated['image_path'] = $request->file('image')->store('products', 'public');
+        }
 
         $product->update($validated);
 
@@ -138,6 +153,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')

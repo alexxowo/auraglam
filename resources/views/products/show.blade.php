@@ -93,8 +93,19 @@
                         @endif
                     </div>
 
-                    <!-- Stock Card -->
+                    <!-- Image and Stock Cards -->
                     <div class="space-y-8">
+                        <div class="card p-0 overflow-hidden aspect-square bg-[#f3f3f4] border border-[#303334]/5 relative flex items-center justify-center">
+                            @if($product->image_path)
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full opacity-20 bg-linear-to-br from-[#ffd9e2] to-transparent absolute inset-0"></div>
+                                <svg class="w-24 h-24 text-[#5d5f60] absolute opacity-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            @endif
+                        </div>
+
                         <div class="card flex flex-col items-center justify-center text-center py-12">
                             <span class="label-md uppercase tracking-widest mb-4">Stock Total</span>
                             <span class="display-text text-6xl text-[#303334] mb-4">{{ $product->total_stock }}</span>

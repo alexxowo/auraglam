@@ -16,13 +16,39 @@
                 </div>
 
                 <div class="card">
-                    <form action="{{ isset($product) ? route('products.update', $product) : route('products.store') }}" method="POST" class="space-y-8">
+                    <form action="{{ isset($product) ? route('products.update', $product) : route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                         @csrf
                         @if(isset($product))
                             @method('PUT')
                         @endif
 
                         <div class="space-y-6">
+                            <!-- Image Upload Section -->
+                            <div>
+                                <label class="label-md block mb-2 uppercase tracking-wider">Imagen Principal</label>
+                                <div class="mt-2 flex items-center gap-6">
+                                    <div id="image-preview" class="w-32 h-32 rounded-2xl bg-[#f3f3f4] border border-[#303334]/5 overflow-hidden flex items-center justify-center relative group">
+                                        @if(isset($product) && $product->image_path)
+                                            <img src="{{ $product->image_url }}" alt="Preview" class="w-full h-full object-cover">
+                                        @else
+                                            <svg class="w-12 h-12 text-[#5d5f60] opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div class="flex-1">
+                                        <input type="file" name="image" id="image" accept="image/*" class="block w-full text-sm text-[#5d5f60]
+                                            file:mr-4 file:py-2.5 file:px-6
+                                            file:rounded-xl file:border-0
+                                            file:text-sm file:font-bold file:uppercase file:tracking-wider
+                                            file:bg-[#be004c]/10 file:text-[#be004c]
+                                            hover:file:bg-[#be004c]/20 file:transition-colors file:cursor-pointer cursor-pointer">
+                                        <p class="mt-2 label-md text-[10px] opacity-60">PNG, JPG o WEBP (Máx. 5MB). Relación recomendada 1:1.</p>
+                                        @error('image') <p class="mt-2 text-xs text-[#f97386]">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+                            </div>
+
                             <div>
                                 <label for="name" class="label-md block mb-2 uppercase tracking-wider">Nombre del Producto</label>
                                 <input type="text" name="name" id="name" value="{{ old('name', $product->name ?? '') }}" required
@@ -142,6 +168,18 @@
 <script>
 $(document).ready(function() {
     let attrIndex = 1;
+
+    // Image preview functionality
+    $('#image').on('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image-preview').html(`<img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">`);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
 
     $('#has_variants').on('change', function() {
         const isChecked = $(this).is(':checked');
